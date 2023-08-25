@@ -1,0 +1,24 @@
+# แสดงวันเวลาในกล้อง/วิดีโอ และบันทึกวิด๊โอ
+# โดยใช้ฟังก์ชัน cv2.putText() แสดงข้อความ
+import cv2 # ใช้งาน OpenCV ใน Python 
+import datetime # ใช้งาน datetime ใน Python  สำหรับวันที่ และเวลา ที่เกิดขึ้นในระบบ หรือ ในโปรแกรม 
+cap = cv2.VideoCapture(0) # กำหนดให้ใช้กล้อง 0 หรือ กล้องหน้า 
+
+# Define the codec and create VideoWriter object
+fourcc = cv2.VideoWriter_fourcc(*'XVID') # กำหนดรหัสการเข้ารหัสวิดีโอ 
+result = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480)) # กำหนดค่าการบันทึกวิดีโอ 
+
+while (cap.isOpened()): # วนซ้ำไปเรื่อยๆ  จนกว่าจะกดปุ่ม q 
+    check, frame = cap.read() # อ่านภาพจากกล้อง  และ กำหนดให้ frame เก็บภาพที่อ่านได้ 
+    font = cv2.FONT_HERSHEY_SIMPLEX # กำหนดแบบอักษร 
+    text = 'Width: ' + str(cap.get(3)) + ' Height: ' + str(cap.get(4)) # กำหนดข้อความ และ ค่าของความกว้าง และ ความสูง 
+    datet = str(datetime.datetime.now()) # อ่านวันที่ และเวลา จากระบบ และ กำหนดให้ datet เก็บข้อมูล
+    frame = cv2.putText(frame, datet, (10,50), font, 1,(255,0,0), 2, cv2.LINE_AA) # แสดงวันเวลาบนภาพ 
+    if check == True: # ถ้าอ่านภาพได้ 
+       cv2.imshow('Output', frame) # แสดงภาพจากกล้อง
+       result.write(frame) # บันทึกวิดีโอ 
+    if cv2.waitKey(1) & 0xFF == ord('q'): # ถ้ากดปุ่ม q ให้หยุดการทำงาน
+        break # ถ้ากดปุ่ม q ให้หยุดการทำงาน
+result.release() # ปิดการบันทึกวิดีโอ
+cap.release() # ปิดกล้อง
+cv2.destroyAllWindows() # ปิดหน้าต่างทั้งหมด

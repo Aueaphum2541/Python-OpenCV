@@ -1,0 +1,27 @@
+import numpy as np # numpy library for matrix operations and arrays 
+import cv2 # OpenCV library 
+
+cap = cv2.VideoCapture(0) # แสดงภาพจากกล้อง 0 คือกล้องหลัก
+
+# Define the codec and create VideoWriter object
+fourcc = cv2.VideoWriter_fourcc(*'XVID') # กำหนดรูปแบบการบันทึก ในที่นี้เป็น XVID 
+out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480)) # กำหนดชื่อไฟล์ ความถี่ และขนาดภาพ 
+
+while(cap.isOpened()): # วนลูปเพื่ออ่านภาพจากกล้อง
+    ret, frame = cap.read() # อ่านภาพจากกล้อง
+    if ret==True: # ถ้าอ่านได้ ให้ทำการบันทึก 
+        frame = cv2.flip(frame,0) # กลับภาพ 0 คือแนวนอน 1 คือแนวตั้ง -1 คือทั้งแนวนอนและแนวตั้ง
+
+        # write the flipped frame
+        out.write(frame) # บันทึกภาพ 
+
+        cv2.imshow('frame',frame) # แสดงภาพ 
+        if cv2.waitKey(1) & 0xFF == ord('q'): # กด q เพื่อออกจากโปรแกรม 
+            break # ออกจากลูป 
+    else: # ถ้าไม่อ่านได้ ให้ออกจากโปรแกรม 
+        break # ออกจากลูป 
+
+# Release everything if job is finished
+cap.release() # ปิดกล้อง
+out.release() # ปิดการบันทึก
+cv2.destroyAllWindows() # ปิดหน้าต่าง

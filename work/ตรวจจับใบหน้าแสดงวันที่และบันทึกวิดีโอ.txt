@@ -1,0 +1,42 @@
+# ตรวจจับใบหน้าจากคลิปวิด๊โอ
+# โดยใช้ Haar Cascade ในการตรวจจับใบหน้า
+
+import cv2
+# อ่านภาพ                                                       
+cap = cv2.VideoCapture(1) 
+import datetime # ใช้งาน datetime ใน Python  สำหรับวันที่ และเวลา ที่เกิดขึ้นในระบบ หรือ ในโปรแกรม 
+# อ่านไฟล์ Haar Cascade Classifier
+face_cascade = cv2.CascadeClassifier('C:\Python\Python OpenCV\image\haarcascade_frontalface_default.xml') # ใบหน้า (Frontal Face) 
+# Define the codec and create VideoWriter object
+fourcc = cv2.VideoWriter_fourcc(*'XVID') # กำหนดรหัสการเข้ารหัสวิดีโอ 
+result = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480)) # กำหนดค่าการบันทึกวิดีโอ 
+# แสดงผลวิด๊โอ
+while (cap.isOpened()):
+    ret, frame = cap.read()
+    font = cv2.FONT_HERSHEY_SIMPLEX # กำหนดแบบอักษร 
+    text = 'Width: ' + str(cap.get(3)) + ' Height: ' + str(cap.get(4)) # กำหนดข้อความ และ ค่าของความกว้าง และ ความสูง 
+    datet = str(datetime.datetime.now()) # อ่านวันที่ และเวลา จากระบบ และ กำหนดให้ datet เก็บข้อมูล
+    frame = cv2.putText(frame, datet, (10,50), font, 1,(255,0,0), 2, cv2.LINE_AA) # แสดงวันเวลาบนภาพ 
+    if ret == True:
+        # แปลงภาพเป็นสีเทา
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # ตรวจจับใบหน้า
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        # วาดกล่องรอบใบหน้า
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), thickness=2)
+        # แสดงผล
+        cv2.imshow('frame', frame)
+        result.write(frame) # บันทึกวิดีโอ 
+        # กด q เพื่อออกจากการทำงาน
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    else:
+        break
+result.release() # ปิดการบันทึกวิดีโอ
+cap.release()
+cv2.destroyAllWindows()
+
+
+
+

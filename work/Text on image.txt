@@ -1,0 +1,25 @@
+import cv2
+
+# อ่านรูปภาพ
+img = cv2.imread('Python OpenCV\image\cat.jpg') # รูปภาพจะถูกอ่านเป็นสี (Color) แบบ BGR (Blue-Green-Red)
+
+# กำหนดขนาด
+imgresize = cv2.resize(img,(700,700)) # กำหนดขนาดให้รูปภาพ 700x700 pixel
+
+# ใส่ข้อความ
+font = cv2.FONT_HERSHEY_SIMPLEX # กำหนดแบบตัวอักษร
+text = 'Hello World' # กำหนดข้อความ
+textsize = cv2.getTextSize(text, font, 1, 2)[0] # คำนวณขนาดข้อความ
+textX = (imgresize.shape[1] - textsize[0]) // 2 # คำนวณพิกัด X ของข้อความ
+textY = (imgresize.shape[0] + textsize[1]) // 2 # คำนวณพิกัด Y ของข้อความ
+cv2.putText(imgresize, text, (textX, textY), font, 1, (0,0,255), 2) # ใส่ข้อความ
+
+# แสดงรูปภาพ
+cv2.imshow('Image',imgresize) # แสดงภาพ
+cv2.waitKey(0) # รอกดปุ่มใดๆ ก่อนปิดหน้าต่าง
+cv2.destroyAllWindows() # ปิดหน้าต่าง
+
+# ใช้ฟังก์ชัน getTextSize() ในการคำนวณขนาดข้อความ
+# ใช้ฟังก์ชัน getTextSize() ในการคำนวณขนาดข้อความ
+# ใช้ฟังก์ชัน getFontScaleFromHeight() ในการคำนวณขนาดตัวอักษร
+# getTextSize(text, fontFace, fontScale, thickness) → retval
